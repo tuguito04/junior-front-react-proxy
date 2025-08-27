@@ -8,7 +8,7 @@ const PAGINATION_CONFIG = {
   PAGE_SIZE: 10,
 };
 
-// Simulated mock data for development
+/* Simulated mock data for development
 const mockProducts = [
   { id: 1, name: 'Laptop', price: 1200.00, stock: 50, category: 'Electrónicos', brand: 'TechPro', image: 'https://placehold.co/400x220/2563EB/ffffff?text=Laptop', createdAt: Date.now() },
   { id: 2, name: 'Mouse Inalámbrico', price: 25.50, stock: 200, category: 'Accesorios', brand: 'ErgoGear', image: 'https://placehold.co/400x220/EAB308/ffffff?text=Mouse', createdAt: Date.now() },
@@ -34,29 +34,33 @@ const mockProducts = [
   { id: 22, name: 'Tablet', price: 320.00, stock: 95, category: 'Electrónicos', brand: 'TabGen', image: 'https://placehold.co/400x220/B8B8B8/ffffff?text=Tablet', createdAt: Date.now() },
 ];
 
-let nextId = mockProducts.length + 1;
+let nextId = mockProducts.length + 1;*/
 
 // Función para simular delay de red
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Obtiene productos con paginación, búsqueda y filtros
+// Obtiene productos con paginación, búsqueda y filtros desde el backend
 export const fetchProducts = async (query = '', category = '', page = 1, pageSize = PAGINATION_CONFIG.PAGE_SIZE) => {
   await delay(500); // Simula latencia de red
+  const url = new URL(`${API_CONFIG.API_URL}/products`);
   
   // Filtra productos por query y categoría
-  let filteredProducts = mockProducts;
+  //let filteredProducts = mockProducts;
+  url.searchParams.append('page', page);
+  url.searchParams.append('pageSize', pageSize);
   
   if (query) {
-    filteredProducts = filteredProducts.filter(p =>
-      p.name.toLowerCase().includes(query.toLowerCase())
-    );
+    /*filteredProducts = filteredProducts.filter(p =>
+      p.name.toLowerCase().includes(query.toLowerCase())*/
+      url.searchParams.append('query', query);    
   }
   
   if (category) {
-    filteredProducts = filteredProducts.filter(p => p.category === category);
+    //filteredProducts = filteredProducts.filter(p => p.category === category);
+    url.searchParams.append('category', category);
   }
   
-  const startIndex = (page - 1) * pageSize;
+  /*const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize;
   const items = filteredProducts.slice(startIndex, endIndex);
   
@@ -66,26 +70,52 @@ export const fetchProducts = async (query = '', category = '', page = 1, pageSiz
     page,
     pageSize,
     totalPages: Math.ceil(filteredProducts.length / pageSize)
-  };
+  };*/
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error('Error al cargar los productos de la API.');    
+  }
+  return await response.json();
 };
 
 // Obtiene todas las categorías únicas
 export const fetchCategories = async () => {
   await delay(300);
-  const categories = [...new Set(mockProducts.map(p => p.category))];
-  return categories;
+  /*const categories = [...new Set(mockProducts.map(p => p.category))];
+  return categories;*/
+  const url = `${API_CONFIG.API_URL}/categories`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error('Error al cargar las categorias de la API.');    
+  }
+  return await response.json();
 };
 
 // Crea un nuevo producto
 export const createProduct = async (newProduct) => {
   await delay(500);
-  const productWithId = { 
+  /*const productWithId = { 
     ...newProduct, 
     id: nextId++, 
     createdAt: Date.now() 
   };
   mockProducts.push(productWithId);
-  return productWithId;
+  return productWithId;*/
+
+  const url = `${API_CONFIG.API_URL}/products`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newProduct),
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al crear un nuevo producto.');    
+  }
+  return await response.json();
 };
 
 export { API_CONFIG, PAGINATION_CONFIG };

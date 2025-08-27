@@ -100,3 +100,34 @@ const Home = ({
 };
 
 export default Home;
+
+/*import React from 'react';
+import SearchBar from '../components/SearchBar';
+import CategorySelect from '../components/CategorySelect';
+import ProductList from '../components/ProductList';
+import Paginator from '../components/Paginator';
+
+const Home = ({ products, loading, error, categories, setView, onProductClick, searchTerm, onSearchChange, selectedCategory, onCategoryChange, currentPage, totalPages, onPageChange, onRetry }) => {
+  return (
+    <main className="app-main">
+      <section className="search-section">
+        <SearchBar searchTerm={searchTerm} onSearchChange={onSearchChange} />
+        <CategorySelect categories={categories} selectedCategory={selectedCategory} onCategoryChange={onCategoryChange} />
+        <button className="btn btn-success" onClick={() => setView('create')}>➕ Crear Producto</button>
+      </section>
+
+      <section className="content-section">
+        {loading && <p>Cargando productos...</p>}
+        {error && <div><p>{error}</p><button onClick={onRetry}>Reintentar</button></div>}
+        {!loading && !error && (
+          <>
+            <ProductList products={products} onProductClick={onProductClick} />
+            <Paginator currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+          </>
+        )}
+      </section>
+    </main>
+  );
+};
+
+export default Home;*/

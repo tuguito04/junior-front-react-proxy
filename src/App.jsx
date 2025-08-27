@@ -1,5 +1,5 @@
 // App.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, } from 'react';
 import { fetchProducts, fetchCategories, createProduct, PAGINATION_CONFIG } from './lib/api';
 import Router from './routes';
 
@@ -45,7 +45,18 @@ const App = () => {
     try {
       const response = await fetchProducts(query, category, page, PAGINATION_CONFIG.PAGE_SIZE);
       setAllProducts(response.items);
-      setTotalPages(response.totalPages);
+      //setTotalPages(response.totalPages);
+      // Total de productos para paginación
+      /*const totalItems = response.totalItems ?? 0; // si el backend devuelve totalItems
+      setTotalPages(Math.ceil(totalItems / PAGINATION_CONFIG.PAGE_SIZE) || 1); */      
+      //setTotalPages(Math.ceil(itemsTotal / PAGINATION_CONFIG.PAGE_SIZE) || 1);
+      if (response.total) {
+        setTotalPages(Math.ceil(response.total / PAGINATION_CONFIG.PAGE_SIZE));
+        
+      } else {
+        setTotalPages(1);
+      }
+        
     } catch (err) {
       console.error('Error loading products:', err);
       setError('Error al cargar los productos. Por favor, asegúrate de que el backend esté en ejecución e inténtalo de nuevo.');
@@ -125,3 +136,4 @@ const App = () => {
 };
 
 export default App;
+
