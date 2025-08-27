@@ -1,5 +1,5 @@
 // components/ProductForm.jsx
-import React, { useState } from 'react';
+import React, { useState } from 'react'; //useEffect
 
 const ProductForm = ({ onSubmit, categories, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -81,12 +81,25 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
           onCancel();
         }, 2000);
       } catch (err) {
-        setErrorMessage('Hubo un error al crear el producto. Inténtalo de nuevo.', err);
+        //setErrorMessage('Hubo un error al crear el producto. Inténtalo de nuevo.', err);
+        setErrorMessage(err?.message || 'Hubo un error al crear el producto. Inténtalo de nuevo.');
       }
     } else {
       setErrorMessage('Por favor, corrige los errores del formulario.');
     }
   };
+
+  // Cerrar modal automáticamente después de mostrar mensaje de éxito
+
+  /*useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        onCancel();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+
+  }, [successMessage, onCancel]);*/
 
   const renderError = (field) => (
     errors[field] && (
@@ -99,12 +112,12 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
   return (
     <>
       {successMessage && (
-        <div className="message success">
+        <div className="message success" role="status">
           <span>&#10004;</span> {successMessage}
         </div>
       )}
       {errorMessage && (
-        <div className="message error">
+        <div className="message error" role="alert">
           <span>&#10006;</span> {errorMessage}
         </div>
       )}
