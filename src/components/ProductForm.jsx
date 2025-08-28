@@ -1,7 +1,10 @@
 // components/ProductForm.jsx
 import React, { useState, useEffect, useRef } from 'react'; 
 
+// --- Formulario de creación de producto ---
+// Permite crear un producto con validación, mensajes de éxito/error y scroll automático
 const ProductForm = ({ onSubmit, categories, onCancel }) => {
+  // --- Estados del formulario ---
   const [formData, setFormData] = useState({
     name: '',
     price: '',
@@ -18,6 +21,7 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
   // Referencia al contenedor de mensajes
   const messageRef = useRef(null);
 
+  // --- Validación de formulario ---
   const validateForm = () => {
     const newErrors = {};
     
@@ -55,11 +59,13 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // --- Maneja cambios en los inputs ---
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // --- Maneja el submit del formulario ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccessMessage('');
@@ -67,8 +73,9 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
     
     if (validateForm()) {
       try {
-        await onSubmit(formData);
+        await onSubmit(formData); // Ejecuta callback para crear producto
         setSuccessMessage('Producto creado exitosamente.');
+        // Reset del formulario
         setFormData({ 
           name: '', 
           price: '', 
@@ -105,6 +112,7 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
 
   }, [successMessage, onCancel]);
 
+  // --- Renderiza errores de cada campo ---
   const renderError = (field) => (
     errors[field] && (
       <div className="field-error" role="alert">
@@ -113,8 +121,10 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
     )
   );
 
+  // --- Renderizado del formulario ---
   return (
     <>
+    {/* Mensajes de éxito/error */}
     <div ref={messageRef}>
       {successMessage && (
         <div className="message success" role="status">
@@ -127,6 +137,7 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
         </div>
       )}
     </div> 
+      {/* Formulario de producto */}
       <form id="createForm" className="product-form" onSubmit={handleSubmit} noValidate>
         <div className="form-row">
           <div className="form-group">

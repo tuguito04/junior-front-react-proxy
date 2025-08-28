@@ -5,6 +5,8 @@ import CategorySelect from '../components/CategorySelect';
 import ProductList from '../components/ProductList';
 import Paginator from '../components/Paginator';
 
+// Componente principal de la página Home
+// Muestra barra de búsqueda, filtros, lista de productos y paginación
 const Home = ({ 
   products, 
   loading, 
@@ -23,7 +25,9 @@ const Home = ({
 }) => {
   return (
     <main className="app-main" role="main">
+      {/* --- Sección de búsqueda y filtros --- */}
       <section className="search-section" aria-label="Búsqueda y filtros">
+        {/* Barra de búsqueda */}
         <div className="search-container">
           <SearchBar 
             searchTerm={searchTerm} 
@@ -31,6 +35,7 @@ const Home = ({
           />
         </div>
         
+        {/* Filtros y botón de creación de producto */}
         <div className="filters-container">
           <CategorySelect 
             categories={categories} 
@@ -47,7 +52,9 @@ const Home = ({
         </div>
       </section>
 
+      {/* Sección de contenido: lista de productos, estados de carga y error */}
       <section className="content-section">
+        {/* Estado de carga */}
         {loading && (
           <div 
             id="loadingState" 
@@ -60,6 +67,7 @@ const Home = ({
           </div>
         )}
 
+        {/* Estado de error */}
         {error && (
           <div 
             id="errorState" 
@@ -79,6 +87,7 @@ const Home = ({
           </div>
         )}
 
+        {/* Lista de productos y paginación cuando no hay carga ni error */}
         {!loading && !error && (
           <>
             <div className="products-container">

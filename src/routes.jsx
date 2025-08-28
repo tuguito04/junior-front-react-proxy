@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
 import Create from './pages/Create';
 
+// Router principal que maneja la vista actual
 const Router = ({ 
   view, 
   setView, 
@@ -23,20 +24,24 @@ const Router = ({
   handleCreateProduct,
   onRetry
 }) => {
+  // --- Manejo de cambio de página ---
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
+  // --- Manejo de clic en un producto ---
   const handleProductClick = (product) => {
     setSelectedProduct(product);
     setView('detail');
   };
 
+  // --- Cerrar modales y regresar a la vista Home ---
   const handleCloseModals = () => {
     setSelectedProduct(null);
     setView('home');
   };
 
+  // --- Renderizado condicional según la vista actual ---
   switch (view) {
     case 'home':
       return (
@@ -60,6 +65,7 @@ const Router = ({
     case 'detail':
       return selectedProduct ? (
         <div>
+          {/* Se muestra Home detrás del detalle */}
           <Home
             products={products}
             loading={loading}
@@ -85,6 +91,7 @@ const Router = ({
     case 'create':
       return (
         <div>
+          {/* Se muestra Home detrás del formulario de creación */}
           <Home
             products={products}
             loading={loading}
@@ -109,6 +116,7 @@ const Router = ({
         </div>
       );
     default:
+      // --- Vista por defecto para rutas no encontradas ---
       return (
         <Home 
           products={[]} 

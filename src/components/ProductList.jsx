@@ -2,8 +2,12 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 
+// Componente de lista de productos
+// Renderiza todos los productos en una cuadrícula usando ProductCard
 const ProductList = ({ products, onProductClick }) => {
-  if (products.length === 0) {
+  // --- Caso sin productos ---
+  // Si no hay productos, muestra un mensaje centrado
+  if (products.length === 0) {    
     return (
       <div className="products-grid" role="grid" aria-label="Lista de productos">
         <p style={{ 
@@ -18,6 +22,8 @@ const ProductList = ({ products, onProductClick }) => {
     );
   }
 
+  // --- Renderizado de productos ---
+  // Itera sobre la lista de productos y crea un ProductCard por cada uno
   return (
     <div className="products-grid" role="grid" aria-label="Lista de productos">
       {products.map(product => (

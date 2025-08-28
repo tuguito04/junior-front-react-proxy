@@ -1,17 +1,13 @@
 // pages/ProductDetail.jsx
 import React from 'react';
 
+// Componente que muestra los detalles de un producto en un modal
 const ProductDetail = ({ product, onHide }) => {
+  // --- Manejo de error en la carga de la imagen ---
   const handleImageError = (e) => {
-    e.target.onerror = null;
+    e.target.onerror = null; // Evita bucles de error
     e.target.src = 'https://placehold.co/600x400/E5E7EB/9CA3AF?text=No+Imagen';
-  };
-
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onHide();
-    }
-  };
+  };  
 
   return (
     <div 
@@ -19,11 +15,13 @@ const ProductDetail = ({ product, onHide }) => {
       className="modal" 
       role="dialog" 
       aria-modal="true" 
-      aria-labelledby="modalTitle"
-      onClick={handleBackdropClick}
+      aria-labelledby="modalTitle"      
     >
-      <div className="modal-backdrop" aria-hidden="true"></div>
+      {/* --- Fondo del modal: clic para cerrar --- */}
+      <div className="modal-backdrop" aria-hidden="true" onClick={onHide}></div>
+      {/* --- Contenido principal del modal --- */}
       <div className="modal-content">
+        {/* --- Encabezado del modal --- */}
         <header className="modal-header">
           <h2 id="modalTitle" className="modal-title">
             {product.name}
@@ -37,6 +35,7 @@ const ProductDetail = ({ product, onHide }) => {
             <span aria-hidden="true">×</span>
           </button>
         </header>
+        {/* --- Cuerpo del modal con detalles del producto --- */}
         <div className="modal-body" id="modalBody">
           <img 
             src={product.image} 

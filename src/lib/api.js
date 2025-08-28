@@ -1,12 +1,10 @@
 // lib/api.js
-import { PAGE_SIZE } from "../config/constants";
-
 const API_CONFIG = {
   API_URL: 'http://localhost:5189/api',
 };
 
 const PAGINATION_CONFIG = {
-  PAGE_SIZE
+  PAGE_SIZE: 10,
 };
 
 // Función para simular delay de red

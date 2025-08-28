@@ -2,12 +2,9 @@
 import React from 'react';
 import ProductForm from '../components/ProductForm';
 
-const Create = ({ categories, onProductCreate, onCancel }) => {
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onCancel();
-    }
-  };
+// Componente de creación de un nuevo producto
+// Muestra un modal con el formulario de creación
+const Create = ({ categories, onProductCreate, onCancel }) => {  
 
   return (
     <div 
@@ -16,9 +13,11 @@ const Create = ({ categories, onProductCreate, onCancel }) => {
       role="dialog" 
       aria-modal="true" 
       aria-labelledby="createModalTitle"
-      onClick={handleBackdropClick}
+      
     >
-      <div className="modal-backdrop" aria-hidden="true"></div>
+      {/* --- Fondo del modal (backdrop) --- */}
+      <div className="modal-backdrop" aria-hidden="true" onClick={onCancel}></div>
+      {/* --- Contenido principal del modal --- */}
       <div className="modal-content">        
         <header className="modal-header">
           <h2 id="createModalTitle" className="modal-title">
@@ -33,6 +32,7 @@ const Create = ({ categories, onProductCreate, onCancel }) => {
             <span aria-hidden="true">×</span>
           </button>
         </header>
+        {/* --- Cuerpo del modal con el formulario de producto --- */}
         <div className="modal-body">
           <ProductForm 
             onSubmit={onProductCreate}
