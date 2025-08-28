@@ -32,11 +32,6 @@ const Router = ({
     setView('detail');
   };
 
-  const handleCreateProductAndRedirect = async (newProductData) => {
-    await handleCreateProduct(newProductData);
-    setView('home');
-  };
-
   const handleCloseModals = () => {
     setSelectedProduct(null);
     setView('home');
@@ -107,8 +102,8 @@ const Router = ({
             onRetry={onRetry}
           />
           <Create
-            categories={categories}
-            onProductCreate={handleCreateProductAndRedirect}
+            categories={categories}            
+            onProductCreate={handleCreateProduct}
             onCancel={handleCloseModals}
           />
         </div>

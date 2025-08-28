@@ -19,7 +19,7 @@ const Create = ({ categories, onProductCreate, onCancel }) => {
       onClick={handleBackdropClick}
     >
       <div className="modal-backdrop" aria-hidden="true"></div>
-      <div className="modal-content">
+      <div className="modal-content">        
         <header className="modal-header">
           <h2 id="createModalTitle" className="modal-title">
             Crear Nuevo Producto

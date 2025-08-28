@@ -44,12 +44,7 @@ const App = () => {
     setError(null);
     try {
       const response = await fetchProducts(query, category, page, PAGINATION_CONFIG.PAGE_SIZE);
-      setAllProducts(response.items);
-      //setTotalPages(response.total);
-      // Total de productos para paginación
-      /*const totalItems = response.total ?? 0; // si el backend devuelve totalItems
-      setTotalPages(Math.ceil(totalItems / PAGINATION_CONFIG.PAGE_SIZE) || 1); */      
-      //setTotalPages(Math.ceil(itemsTotal / PAGINATION_CONFIG.PAGE_SIZE) || 1);
+      setAllProducts(response.items);      
       if (response.total) {
         setTotalPages(Math.ceil(response.total / PAGINATION_CONFIG.PAGE_SIZE));
         
@@ -80,10 +75,6 @@ const App = () => {
   // Recargar productos cuando cambie la página
   useEffect(() => {
     loadProducts(searchTerm, selectedCategory, currentPage);
-    /*if (currentPage > 1) {
-      loadProducts(searchTerm, selectedCategory, currentPage);
-    }*/
-
   }, [currentPage]);
 
   const handleCreateProduct = async (newProductData) => {

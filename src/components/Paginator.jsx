@@ -3,11 +3,7 @@ import React from 'react';
 
 const Paginator = ({ currentPage, totalPages, onPageChange }) => {
   const prevDisabled = currentPage === 1;
-  const nextDisabled = currentPage >= totalPages;
-
-  /*if (totalPages <= 1) {
-    return null;
-  }*/
+  const nextDisabled = currentPage >= totalPages;  
 
   return (
     <nav 
@@ -49,22 +45,5 @@ const Paginator = ({ currentPage, totalPages, onPageChange }) => {
 
 export default Paginator;
 
-/*import React from 'react';
 
-const Paginator = ({ currentPage, totalPages, onPageChange }) => {
-  const prevDisabled = currentPage === 1;
-  const nextDisabled = currentPage >= totalPages;
-
-  if (!totalPages || totalPages < 1) return null;
-
-  return (
-    <nav className="pagination">
-      <button disabled={prevDisabled} onClick={() => onPageChange(currentPage - 1)}>← Anterior</button>
-      <span>Página {currentPage} de {totalPages}</span>
-      <button disabled={nextDisabled} onClick={() => onPageChange(currentPage + 1)}>Siguiente →</button>
-    </nav>
-  );
-};
-
-export default Paginator;*/
 

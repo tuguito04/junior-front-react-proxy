@@ -1,5 +1,5 @@
 // components/ProductForm.jsx
-import React, { useState } from 'react'; //useEffect
+import React, { useState, useEffect, useRef } from 'react'; 
 
 const ProductForm = ({ onSubmit, categories, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +15,8 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  // Referencia al contenedor de mensajes
+  const messageRef = useRef(null);
 
   const validateForm = () => {
     const newErrors = {};
@@ -75,13 +77,8 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
           category: '', 
           description: '',
           brand: ''
-        });
-        // Retrasar el cierre del modal para mostrar el mensaje
-        setTimeout(() => {
-          onCancel();
-        }, 2000);
-      } catch (err) {
-        //setErrorMessage('Hubo un error al crear el producto. Inténtalo de nuevo.', err);
+        });        
+      } catch (err) {        
         setErrorMessage(err?.message || 'Hubo un error al crear el producto. Inténtalo de nuevo.');
       }
     } else {
@@ -89,9 +86,16 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
     }
   };
 
+  //Scroll automático hacia los mensajes
+  useEffect(() => {
+    if ((successMessage || errorMessage) && messageRef.current) {
+      messageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [successMessage, errorMessage]);
+
   // Cerrar modal automáticamente después de mostrar mensaje de éxito
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
         onCancel();
@@ -99,7 +103,7 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
       return () => clearTimeout(timer);
     }
 
-  }, [successMessage, onCancel]);*/
+  }, [successMessage, onCancel]);
 
   const renderError = (field) => (
     errors[field] && (
@@ -111,6 +115,7 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
 
   return (
     <>
+    <div ref={messageRef}>
       {successMessage && (
         <div className="message success" role="status">
           <span>&#10004;</span> {successMessage}
@@ -121,7 +126,7 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
           <span>&#10006;</span> {errorMessage}
         </div>
       )}
-      
+    </div> 
       <form id="createForm" className="product-form" onSubmit={handleSubmit} noValidate>
         <div className="form-row">
           <div className="form-group">
