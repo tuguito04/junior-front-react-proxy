@@ -94,7 +94,7 @@ Incluye búsqueda, filtrado por categorías, paginación, creación de productos
 
 1. Clonar el repositorio:
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/tuguito04/junior-front-react-proxy.git>
    cd junior-front-react-proxy
    npm install
    npm run dev
