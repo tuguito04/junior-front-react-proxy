@@ -21,43 +21,16 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
   // Referencia al contenedor de mensajes
   const messageRef = useRef(null);
 
-  // --- Validación de formulario ---
-  const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'Este campo es obligatorio.';
-    }
-    
-    if (!formData.price) {
-      newErrors.price = 'Este campo es obligatorio.';
-    } else if (parseFloat(formData.price) < 0) {
-      newErrors.price = 'El valor no puede ser negativo.';
-    }
-    
-    if (!formData.stock) {
-      newErrors.stock = 'Este campo es obligatorio.';
-    } else if (parseFloat(formData.stock) < 0) {
-      newErrors.stock = 'El valor no puede ser negativo.';
-    }
-    
-    if (!formData.image.trim()) {
-      newErrors.image = 'Este campo es obligatorio.';
-    } else if (!formData.image.match(/^(http|https):\/\/[^ "]+$/)) {
-      newErrors.image = 'Por favor, introduce una URL válida.';
-    }
-    
-    if (!formData.category) {
-      newErrors.category = 'Este campo es obligatorio.';
-    }
-    
-    if (!formData.brand.trim()) {
-      newErrors.brand = 'Este campo es obligatorio.';
-    }
+  // --- Prevención de "e", "+", "-" en inputs number ---
+  useEffect(() => {
+    const numberInputs = document.querySelectorAll('input[type="number"]');
+    const preventInvalid = (e) => {
+      if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault();
+    };
+    numberInputs.forEach(input => input.addEventListener('keydown', preventInvalid));
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    return () => numberInputs.forEach(input => input.removeEventListener('keydown', preventInvalid));
+  }, []);
 
   // --- Maneja cambios en los inputs ---
   const handleChange = (e) => {
@@ -65,6 +38,48 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // --- Validación de formulario usando reglas dinámicas ---
+  const validateForm = () => {
+    const newErrors = {};
+    const fields = [
+      { name: 'name', type: 'text', minLength: 3 },
+      { name: 'price', type: 'number' },
+      { name: 'stock', type: 'number' },
+      { name: 'image', type: 'url' },
+      { name: 'category', type: 'text' },
+      { name: 'brand', type: 'text', minLength: 2 }
+    ];
+
+    const validationRules = {
+      text: [
+        { check: input => !input.value.trim(), msg: 'Este campo es obligatorio.' },
+        { check: input => input.minLength && input.value.length < input.minLength, msg: input => `Debe tener al menos ${input.minLength} caracteres.` }
+      ],
+      number: [
+        { check: input => !input.value, msg: 'Este campo es obligatorio.' },
+        { check: input => parseFloat(input.value) < 0, msg: 'El valor no puede ser negativo.' }
+      ],
+      url: [
+        { check: input => !input.value.trim(), msg: 'Este campo es obligatorio.' },
+        { check: input => !/^https?:\/\/[\w.-]+(\.[\w.-]+)+[/#?]?.*$/.test(input.value), msg: 'Por favor, introduce una URL válida que comience con http:// o https://' }
+      ]
+    };
+
+    fields.forEach(field => {
+      const value = formData[field.name];
+      const rules = validationRules[field.type];
+      for (let rule of rules) {
+        if (rule.check({ value, minLength: field.minLength })) {
+          newErrors[field.name] = typeof rule.msg === 'function' ? rule.msg({ value, minLength: field.minLength }) : rule.msg;
+          break; // mostrar solo el primer error
+        }
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+    
   // --- Maneja el submit del formulario ---
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -151,7 +166,7 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
               className="form-input"
               value={formData.name}
               onChange={handleChange}
-              required
+              required minlength="3" maxlength="40"
               aria-describedby="name-error"
             />
             {renderError('name')}
@@ -207,7 +222,7 @@ const ProductForm = ({ onSubmit, categories, onCancel }) => {
               className="form-input"
               value={formData.brand}
               onChange={handleChange}
-              required
+              required minlength="3" maxlength="40"
               aria-describedby="brand-error"
             />
             {renderError('brand')}

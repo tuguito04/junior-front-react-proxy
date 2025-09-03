@@ -36,15 +36,16 @@ const ProductDetail = ({ product, onHide }) => {
           </button>
         </header>
         {/* --- Cuerpo del modal con detalles del producto --- */}
-        <div className="modal-body" id="modalBody">
+        <div className="modal-body" id="modalBody">          
           <img 
             src={product.image} 
             alt={product.name}
             style={{
-              width: '100%', 
-              height: 'auto', 
+              width: '220px',
+              height: '220px', 
               borderRadius: '12px', 
-              marginBottom: '1rem'
+              margin: '0 auto 1rem',
+              display: 'block'
             }}
             onError={handleImageError}
           />
